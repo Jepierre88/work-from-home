@@ -14,6 +14,7 @@ export class DataJepierreController {
   async getAllTargets() {
     try {
       const targets = await this.dataJepierreService.findAllTargets()
+      console.log("Error")
       return targets
     } catch (error) {
       throw new Error(error.message)

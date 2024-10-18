@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 @Entity({
-  database: "data-jepierre",
+  database: process.env.DB_DATABASE,
 })
 export class Admin {
   @PrimaryGeneratedColumn({ name: "id" })

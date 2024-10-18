@@ -20,12 +20,15 @@ export class DataJepierreService {
 
   async findAllTargets(): Promise<Target[]> {
     const targets = await this.targetRepository.find();
+    console.log(targets)
     return targets;
 
   }
 
   async findOneTargetById(id: number): Promise<Target> {
-    const target = await this.targetRepository.findOneBy({ id: id });
+    const target = await this.targetRepository.findOne({
+      where: { id: id },
+    });
     return target;
   }
 
@@ -74,18 +77,15 @@ export class DataJepierreService {
       throw new Error(`Target with ID ${createInformationDto.idTarget} not found`);
     }
 
-    const information = this.informationRepository.create({
-      ...createInformationDto,
-      admin: admin,
-      target: target,
-    });
+    const newInformation = await this.informationRepository.create(createInformationDto)
 
-    const informationSaved = await this.informationRepository.save(information);
-    return informationSaved;
+    return newInformation
   }
 
   async findAllInformation(): Promise<Information[]> {
-    const informations = await this.informationRepository.find();
+    const informations = await this.informationRepository.find({
+      relations: ["admin", "target"]
+    });
     return informations;
   }
 
@@ -97,24 +97,10 @@ export class DataJepierreService {
     return information;
   }
 
-  async updateInformationById(id: number, updateInformationDto: UpdateInformationDto): Promise<Information> {
-    const information = await this.findInformationById(id);  // Ensure the record exists before updating
-    if (updateInformationDto.informationData !== undefined) {
-      information.informationData = updateInformationDto.informationData;
-    }
-    if (updateInformationDto.idAdmin !== undefined) {
-      information.admin.id = updateInformationDto.idAdmin;
-    }
-    if (updateInformationDto.idTarget !== undefined) {
-      information.target.id = updateInformationDto.idTarget;
-    }
-    if (updateInformationDto.startDate !== undefined) {
-      information.startDate = updateInformationDto.startDate;
-    }
-    if (updateInformationDto.endDate !== undefined) {
-      information.endDate = updateInformationDto.endDate;
-    }
-    const informationUpdated = await this.informationRepository.save(information);
+  async updateInformationById(id: number, updateInformationDto: UpdateInformationDto): Promise<any> {
+    const informationUpdated = await this.informationRepository.update({ id: id }, updateInformationDto)
+    // const information = await this.findInformationById(id);  // Ensure the record exists before updating
+    // const informationUpdated = await this.informationRepository.save(information);
     return informationUpdated;
   }
 

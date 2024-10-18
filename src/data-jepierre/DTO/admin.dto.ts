@@ -1,7 +1,6 @@
-import { PartialType } from "@nestjs/mapped-types";
-import { Type } from "class-transformer";
-import { IsInt, IsNotEmpty, IsOptional, IsString, Max } from "class-validator";
-
+import { PartialType } from '@nestjs/mapped-types';
+import { Type } from 'class-transformer';
+import { IsInt, IsNotEmpty, IsOptional, IsString, Max } from 'class-validator';
 
 export class CreateAdminDto {
   @IsInt()
@@ -12,7 +11,7 @@ export class CreateAdminDto {
   @IsNotEmpty()
   lastName: string;
   @IsInt()
-  @Max(120, { message: "Please enter a valid age" })
+  @Max(120, { message: 'Please enter a valid age' })
   age: number;
   @Type(() => Date)
   birthDay: Date;
